@@ -1,4 +1,4 @@
-resource "aws_eks_cluster" "example" {
+resource "aws_eks_cluster" "BudCluster" {
   name     = "my-eks-cluster"
   role_arn = "arn:aws:iam::173278684542:role/eksClusterRole"
 
