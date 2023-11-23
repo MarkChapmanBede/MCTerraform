@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        // Bind the Jenkins credentials to environment variables
+        // Env Vars for Terraform/Created cluster details
         TF_VAR_node_role_arn = credentials('TF_VAR_node_role_arn')
         TF_VAR_cluster_role_arn = credentials('TF_VAR_cluster_role_arn')
         TF_VAR_subnet_ids = credentials('TF_VAR_subnet_ids')
@@ -17,21 +17,25 @@ pipeline {
 
         stage('Plan') {
             steps {
-                sh 'terraform plan'
+                script {
+                    // Output of terraform plan
+                    planOutput = sh(script: 'terraform plan', returnStdout: true).trim()
+                    echo "Plan Output: \n${planOutput}"
+                }
             }
         }
 
         stage('Apply') {
             steps {
                 input "Are you sure you want to apply the Terraform changes?"
-                sh 'terraform apply'
+                sh 'terraform apply -auto-approve'
             }
         }
     }
 
     post {
         always {
-            cleanWs()  // Clean up the workspace after the pipeline execution
+            cleanWs()  // Clean up
         }
     }
 }
