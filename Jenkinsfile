@@ -24,7 +24,7 @@ pipeline {
 
     post {
         always {
-            cleanWs
+            cleanWs()
             // Clean up or any other post actions
         }
     }
