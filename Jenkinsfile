@@ -1,6 +1,13 @@
 pipeline {
     agent any
 
+    environment {
+        // Bind the Jenkins credentials to environment variables
+        TF_VAR_node_role_arn = credentials('TF_VAR_node_role_arn')
+        TF_VAR_cluster_role_arn = credentials('TF_VAR_cluster_role_arn')
+        TF_VAR_subnet_ids = credentials('TF_VAR_subnet_ids')
+    }
+
     stages {
         stage('Initialize') {
             steps {
@@ -24,8 +31,7 @@ pipeline {
 
     post {
         always {
-            cleanWs()
-            // Clean up or any other post actions
+            cleanWs()  // Clean up the workspace after the pipeline execution
         }
     }
 }
